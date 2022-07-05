@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    environment{
+        name ='prahlad'
+    }
+    parameters{
+        string(name: 'person', defaultValue: 'Deepak salvi' )
+        booleanParam(name: 'valid', defaultValue: 'false' )
+        choice(name: 'city', choices: ['nbh','cor','udr'])
+    }
+    stages {
+        stage('git') {
+            steps {
+                
+                sh '''
+                echo 'Taking git pull'
+                date
+                pwd 
+                echo ${name}
+                '''
+            }
+        }
+        stage('Build') {
+            environment{
+            surename ='salvi'
+        }
+        input{
+            message 'Should we continue'
+            ok 'yes we continue'
+        }
+            steps {
+                echo 'crating Build'
+                sh 'echo ${name} ${surename}'
+                sh 'echo ${valid}'
+                sh 'echo ${city}'
+            }    
+        }
+        stage('deploye') {
+            steps {
+                echo 'build deployed on dev'
+                sh 'echo ${surename}'
+                sh 'echo ${person}'
+                git branch: 'main', url: 'https://github.com/rajsalvi03/gitPractice.git'
+                sh 'ls -lrth'
+            }    
+        }
+    }
+    post{
+        always{
+                echo 'i will always run'
+            }
+        failure{
+            echo 'failure'
+        }    
+        success{
+            echo 'success'
+        }
+        }
+}
